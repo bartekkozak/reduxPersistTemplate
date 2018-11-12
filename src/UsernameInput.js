@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, Text, View, TextInput, Button } from "react-native";
 import { connect } from "react-redux";
-import { updateUsername } from "./redux/user";
+import { updateUsername } from "./store/actions/index";
 
 class UsernameInput extends React.Component {
   state = {
@@ -13,7 +13,7 @@ class UsernameInput extends React.Component {
   };
 
   handleSubmit = () => {
-    this.props.dispatch(updateUsername(this.state.username));
+    this.props.onUpdateUsername(this.state.username);
   };
 
   render() {
@@ -22,10 +22,10 @@ class UsernameInput extends React.Component {
         <TextInput
           placeholder="Choose a Username"
           onChangeText={this.handleChange}
-          value={this.state.username}
+          // value={this.state.username}
         />
         <Button title="Submit" onPress={this.handleSubmit} />
-        {/* <Text>{this.state.username}</Text> */}
+        <Text>{this.props.user.username}</Text>
       </View>
     );
   }
@@ -33,7 +33,6 @@ class UsernameInput extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center"
@@ -44,4 +43,13 @@ const mapStateToProps = state => ({
   user: state.user
 });
 
-export default connect(mapStateToProps)(UsernameInput);
+const mapDispatchToProps = dispatch => {
+  return {
+    onUpdateUsername: name => dispatch(updateUsername(name))
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(UsernameInput);
